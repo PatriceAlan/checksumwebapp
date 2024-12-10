@@ -1,0 +1,55 @@
+# Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.so
+*.egg
+*.eggs
+dist/
+build/
+*.bak
+*.swp
+*.swo
+*.vscode/
+
+# Virtual Environment
+venv/
+env/
+*.env
+
+# Docker
+*.docker/
+docker-compose.override.yml
+
+# Redis (if applicable)
+*.rdb
+*.aof
+
+# IDE/Editor
+.idea/
+.vscode/
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Coverage
+.coverage
+*.coveragerc
+nosetests.xml
+coverage.xml
+*.hypothesis/
+
+# Python Distribution
+*.tar.gz
+*.zip
+*.egg-info/
+dist/
+build/
+
+# MacOS
+*.swp
