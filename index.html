@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculateur de Checksum</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        input, select, button {
+            margin: 10px 0;
+            padding: 8px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        #historique {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .entry {
+            background-color: #f4f4f4;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculateur de Checksum</h1>
+    
+    <input type="text" id="inputString" placeholder="Entrez votre chaîne">
+    
+    <select id="algorithm">
+        <option value="sha256">SHA-256</option>
+        <option value="md5">MD5</option>
+        <option value="sha1">SHA-1</option>
+    </select>
+    
+    <button onclick="calculerChecksum()">Calculer Checksum</button>
+    
+    <div id="resultat"></div>
+    
+    <div id="historique">
+        <h2>Historique des Checksums</h2>
+        <div id="listeChecksums"></div>
+    </div>
+
+    <script>
+        async function calculerChecksum() {
+            const inputString = document.getElementById('inputString').value;
+            const algorithm = document.getElementById('algorithm').value;
+            const resultatDiv = document.getElementById('resultat');
+            
+            try {
+                const response = await fetch('/checksum', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        input: inputString, 
+                        algorithm: algorithm 
+                    }),
+                });
+
+                const data = await response.json();
+                
+                resultatDiv.innerHTML = `
+                    <p>Checksum: ${data.checksum}</p>
+                    <p>Algorithme: ${data.algorithm}</p>
+                `;
+                
+                // Rafraîchir l'historique
+                chargerHistorique();
+            } catch (error) {
+                resultatDiv.innerHTML = `Erreur: ${error.message}`;
+            }
+        }
+
+        async function chargerHistorique() {
+            const listeDiv = document.getElementById('listeChecksums');
+            
+            try {
+                const response = await fetch('/checksums');
+                const checksums = await response.json();
+                
+                listeDiv.innerHTML = checksums.map(entry => `
+                    <div class="entry">
+                        <strong>Entrée:</strong> ${entry.input}<br>
+                        <strong>Checksum:</strong> ${entry.checksum}<br>
+                        <strong>Algorithme:</strong> ${entry.algorithm}<br>
+                    </div>
+                `).join('');
+            } catch (error) {
+                listeDiv.innerHTML = `Erreur de chargement: ${error.message}`;
+            }
+        }
+
+        // Charger l'historique au démarrage
+        chargerHistorique();
+    </script>
+</body>
+</html>
