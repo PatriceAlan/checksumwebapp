@@ -27,7 +27,7 @@ Ce projet est une API simple en Flask permettant de calculer des checksums (hach
    ```bash
    git clone https://github.com/PatriceAlan/checksumwebapp.git
    cd checksumwebapp
-
+   ```
 Construisez et lancez les services avec Docker Compose :
 
 ```bash
